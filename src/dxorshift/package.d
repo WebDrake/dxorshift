@@ -28,9 +28,11 @@
 module dxorshift;
 
 public import dxorshift.splitmix64;
+public import dxorshift.xoroshiro128plus;
 
 unittest
 {
     import std.random : isUniformRNG;
     assert(isUniformRNG!SplitMix64);
+    assert(isUniformRNG!Xoroshiro128plus);
 }
