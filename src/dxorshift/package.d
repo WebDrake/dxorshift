@@ -26,3 +26,11 @@
  *     (public domain)
  */
 module dxorshift;
+
+public import dxorshift.splitmix64;
+
+unittest
+{
+    import std.random : isUniformRNG;
+    assert(isUniformRNG!SplitMix64);
+}
