@@ -5,5 +5,14 @@
 	"homepage": "https://github.com/WebDrake/dxorshift",
 	"copyright": "Written in 2016 by Joseph Rushton Wakeling",
 	"license": "public domain",
-	"targetType": "library"
+	"targetType": "library",
+
+	"subPackages": [
+		{
+			"name": "benchmark",
+			"targetType": "executable",
+			"sourcePaths": ["benchmark/", "src/"],
+			"importPaths": ["src/"]
+		}
+	]
 }
