@@ -1,0 +1,9 @@
+{
+	"name": "dxorshift",
+	"description": "Random number generators from the extended Xorshift family",
+	"authors": ["Joseph Rushton Wakeling"],
+	"homepage": "https://github.com/WebDrake/dxorshift",
+	"copyright": "Written in 2016 by Joseph Rushton Wakeling",
+	"license": "public domain",
+	"targetType": "library"
+}
