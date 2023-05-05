@@ -1,0 +1,22 @@
+name: tests
+on: [pull_request, push, release]
+
+jobs:
+  tests:
+    name: Unittests
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, ubuntu-latest]
+        dc: [dmd-2.075.1, dmd-latest, ldc-1.5.0, ldc-latest]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up D toolchain
+        uses: dlang-community/setup-dlang@v1
+        with:
+          compiler: ${{ matrix.dc }}
+
+      - name: Run unittests
+        run: dub test --build=unittest-cov
