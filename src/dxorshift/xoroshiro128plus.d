@@ -116,15 +116,14 @@ struct Xoroshiro128plus
     void jump() @nogc @safe nothrow pure
     {
         enum ulong[2] jump_ = [0xbeac0467eba5facb, 0xd86b048b86aa9922];
-        enum jumpSize = jump_.sizeof / (*(jump_.ptr)).sizeof;
         ulong s0 = 0;
         ulong s1 = 0;
 
-        for (size_t i = 0; i < jumpSize; ++i)
+        foreach (jmp; jump_)
         {
             for (int b = 0; b < 64; ++b)
             {
-                if (jump_[i] & 1uL << b)
+                if (jmp & 1uL << b)
                 {
                     s0 ^= this.state[0];
                     s1 ^= this.state[1];
@@ -149,7 +148,7 @@ struct Xoroshiro128plus
      */
     typeof(this) dup() @nogc @property @safe nothrow pure
     {
-        return typeof(this)(this);
+        return typeof(this)(&this);
     }
 
     /// (Re)seeds the generator.
@@ -204,7 +203,7 @@ struct Xoroshiro128plus
     ulong[2] state;
 
     // Helper constructor used to implement `dup`
-    this(ref typeof(this) that) @nogc @safe nothrow pure
+    this(const(typeof(this)*) that) @nogc @safe nothrow pure
     {
         this.state[] = that.state[];
     }
@@ -279,7 +278,7 @@ unittest
     static assert(isSeedable!(Xoroshiro128plus, ulong[2]));
     static assert(isSeedable!(Xoroshiro128plus, ulong[]));
     static assert(isSeedable!(Xoroshiro128plus, ulong));
-    static assert(isSeedable!(Xoroshiro128plus, SplitMix64));
+    static assert(isSeedable!(Xoroshiro128plus, SplitMix64*));
 
     // output comparisons to reference implementation,
     // using constructor, seeding, and duplication

@@ -117,28 +117,27 @@ public struct Xorshift1024star
              0x2ffeeb0a48316f40, 0xdc2d9891fe68c022, 0x3659132bb12fea70, 0xaac17d8efa43cab8,
              0xc4cb815590989b13, 0x5ee975283d71c93b, 0x691548c86c1bd540, 0x7910c41d10a1e6a5,
              0x0b5fc64563b3e2a8, 0x047f7684e9fc949d, 0xb99181f2d8f685ca, 0x284600e3f30e38c3];
-        enum jumpSize = jump_.sizeof / (*(jump_.ptr)).sizeof;
 
         ulong[16] t;
 
-        foreach (immutable size_t i; 0 .. jumpSize)
+        foreach (jmp; jump_)
         {
             foreach (immutable int b; 0 .. 64)
             {
-                if (jump_[i] & 1uL << b)
+                if (jmp & 1uL << b)
                 {
-                    foreach (immutable int j; 0 .. 16)
+                    foreach (immutable int i; 0 .. 16)
                     {
-                        t[j] ^= this.state[(j + this.p) & 15];
+                        t[i] ^= this.state[(i + this.p) & 15];
                     }
                 }
                 this.popFront();
             }
         }
 
-        foreach (immutable int j; 0 .. 16)
+        foreach (immutable int i; 0 .. 16)
         {
-            this.state[(j + this.p) & 15] = t[j];
+            this.state[(i + this.p) & 15] = t[i];
         }
 
         this.popFront();
@@ -156,7 +155,7 @@ public struct Xorshift1024star
      */
     typeof(this) dup() @nogc @property @safe nothrow pure
     {
-        return typeof(this)(this);
+        return typeof(this)(&this);
     }
 
     /// (Re)seeds the generator.
@@ -203,7 +202,7 @@ public struct Xorshift1024star
     int p;
 
     // Helper constructor used to implement `dup`
-    this(ref typeof(this) that) @nogc @safe nothrow pure
+    this(const(typeof(this)*) that) @nogc @safe nothrow pure
     {
         this.state[] = that.state[];
         this.p = that.p;
@@ -263,7 +262,7 @@ unittest
     static assert(isUniformRNG!Xorshift1024star);
     static assert(isSeedable!Xorshift1024star);
     static assert(isSeedable!(Xorshift1024star, ulong[16]));
-    static assert(isSeedable!(Xorshift1024star, SplitMix64));
+    static assert(isSeedable!(Xorshift1024star, SplitMix64*));
 
     // output comparisons to reference implementation,
     // using constructor, seeding, and duplication
