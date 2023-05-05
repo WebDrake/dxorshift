@@ -100,7 +100,7 @@ struct Xoroshiro128plus
     {
         assert(this.state != [0uL, 0uL]);
     }
-    body
+    do
     {
         immutable ulong s1 = this.state[1] ^ this.state[0];
         this.state[0] = rotateLeft(this.state[0], 55) ^ s1 ^ (s1 << 14);
@@ -165,7 +165,7 @@ struct Xoroshiro128plus
         // seeds are not both 0
         assert(!(!s0 && !s1));
     }
-    body
+    do
     {
         this.state[0] = s0;
         this.state[1] = s1;
@@ -178,7 +178,7 @@ struct Xoroshiro128plus
     {
         assert(!(!s[0] && !s[1]));
     }
-    body
+    do
     {
         seed(s[0], s[1]);
     }
@@ -215,7 +215,7 @@ struct Xoroshiro128plus
         assert(0 <= k);
         assert(k <= 64);
     }
-    body
+    do
     {
         return (x << k) | (x >> (64 - k));
     }

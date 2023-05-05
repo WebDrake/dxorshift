@@ -96,7 +96,7 @@ public struct Xorshift1024star
     {
         assert(this.state != typeof(this.state).init);
     }
-    body
+    do
     {
         immutable ulong s0 = this.state[this.p];
         ulong s1 = this.state[this.p = (this.p + 1) & 15];
@@ -171,7 +171,7 @@ public struct Xorshift1024star
     {
         assert(s != typeof(s).init);
     }
-    body
+    do
     {
         this.state[] = s[];
         this.p = 0;
